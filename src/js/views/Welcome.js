@@ -8,17 +8,13 @@ import RegisterForm from '../components/RegisterForm';
 function Welcome() {
   const navigate = useNavigate();
   const [isLoginView, setLoginView] = useState(true);
-  const { user, isChecking } = useSelector(({auth}) => auth);
+  const { user } = useSelector(({auth}) => auth);
 
   useEffect(() => {
     if (user) {
       navigate('/home');
     }
   }, [user])
-
-  if (isChecking) {
-    return <h1>Checking the state...</h1>
-  }
 
   return (
     <div className="centered-view">

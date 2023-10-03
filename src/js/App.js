@@ -2,44 +2,77 @@ import React, { useEffect } from 'react';
 import { 
   HashRouter as Router,
   Routes,
-  Route
+  Route,
+  Navigate
 } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import StoreProvider from './store/StoreProvider';
 import Home from './views/Home';
 import Navbar from './components/Navbar';
 import Settings from './views/Settings';
 import Welcome from './views/Welcome';
 import Chat from './views/Chat';
+import LoadingView from './components/shared/LoadingView';
 
-import configureStore from './store';
 import { listenToAuthChanges } from './actions/auth';
 
-const store = configureStore();
 
-function App() {
+function AuthRoute({children}) {
+  const user = useSelector(({auth}) => auth.user)
+  
+  return user ? children : <Navigate to={"/"} />;
+}
+
+const ContentWrapper = ({children}) => <div className='content-wrapper'>{children}</div>
+
+function ChatApp() {
+
+  const dispatch = useDispatch();
+  const isChecking = useSelector(({auth}) => auth.isChecking)
 
   useEffect(() => {
-    store.dispatch(listenToAuthChanges());
-  }, []);
+    dispatch(listenToAuthChanges());
+  }, [dispatch]);
+
+  if (isChecking) {
+    return <LoadingView />
+  }
 
   return (
-    <Provider store={store}>
-      <Router>
-        <Navbar />
-        <div className='content-wrapper'>
-          <Routes>
-            <Route path="/" element={<Welcome />} />
-            <Route path="/home" element={<Home />} />
-            <Route path='/settings' element={<Settings />} />
-            <Route path='/chat/:id' element={<Chat />} />
-          </Routes>
-        </div>
-      </Router>
-    </Provider>
+    <Router>
+      <Navbar />
+      <ContentWrapper>
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/home" element={
+            <AuthRoute>
+              <Home />
+            </AuthRoute>
+          }/>
+          <Route path='/settings' element={
+            <AuthRoute>
+              <Settings />
+            </AuthRoute>
+          } />
+          <Route path='/chat/:id' element={
+            <AuthRoute>
+              <Chat />
+            </AuthRoute>
+          }/>
+        </Routes>
+      </ContentWrapper>
+    </Router>
   )
   
-  
+}
+
+function App() {
+  return (
+    <StoreProvider>
+      <ChatApp />
+    </StoreProvider>
+  )
 }
 
 export default App;
