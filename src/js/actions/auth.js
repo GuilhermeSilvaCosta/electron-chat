@@ -27,7 +27,7 @@ export const logout = () => async dispatch => {
 
 export const listenToAuthChanges = () => dispatch => {
     dispatch({type: 'AUTH_ON_INIT'});
-    api.onAuthStateChanges(async auth => {
+    return api.onAuthStateChanges(async auth => {
         if (auth) {
             const user = await api.getUserProfile(auth.uid);
             dispatch({ type: 'AUTH_ON_SUCCESS', user });

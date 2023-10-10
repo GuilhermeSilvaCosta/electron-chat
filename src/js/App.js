@@ -11,11 +11,13 @@ import StoreProvider from './store/StoreProvider';
 import Home from './views/Home';
 import Navbar from './components/Navbar';
 import Settings from './views/Settings';
+import ChatCreate from './views/ChatCreate';
 import Welcome from './views/Welcome';
 import Chat from './views/Chat';
 import LoadingView from './components/shared/LoadingView';
 
 import { listenToAuthChanges } from './actions/auth';
+import { listenToConnectionChanges } from './actions/app';
 
 
 function AuthRoute({children}) {
@@ -29,11 +31,22 @@ const ContentWrapper = ({children}) => <div className='content-wrapper'>{childre
 function ChatApp() {
 
   const dispatch = useDispatch();
-  const isChecking = useSelector(({auth}) => auth.isChecking)
+  const isChecking = useSelector(({auth}) => auth.isChecking);
+  const isOnline = useSelector(({app}) => app.isOnline);
 
   useEffect(() => {
-    dispatch(listenToAuthChanges());
+    const unsubFromAuth = dispatch(listenToAuthChanges());
+    const unsubFromConnection = dispatch(listenToConnectionChanges());
+
+    return () => {
+      unsubFromAuth();
+      unsubFromConnection();
+    }
   }, [dispatch]);
+
+  if (!isOnline) {
+    return <LoadingView message="Application has been disconnected from the internet. Please reconnect..." />
+  }
 
   if (isChecking) {
     return <LoadingView />
@@ -50,6 +63,11 @@ function ChatApp() {
               <Home />
             </AuthRoute>
           }/>
+          <Route path='/chatCreate' element={
+            <AuthRoute>
+              <ChatCreate />
+            </AuthRoute>
+          } />
           <Route path='/settings' element={
             <AuthRoute>
               <Settings />
