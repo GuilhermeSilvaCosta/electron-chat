@@ -3,8 +3,8 @@ import * as api from '../api/auth';
 export const register = formData => async dispatch => {
     dispatch({type: 'AUTH_REGISTER_INIT'});
     try {
-        await api.register(formData);
-        dispatch({ type: 'AUTH_REGISTER_SUCCESS', user: {} });
+        const user = await api.register(formData);
+        dispatch({ type: 'AUTH_REGISTER_SUCCESS', user })
     } catch(err) {
         dispatch({ type: 'AUTH_REGISTER_ERROR', error: err });
     }
@@ -13,8 +13,8 @@ export const register = formData => async dispatch => {
 export const loginUser = formData => async dispatch => {
     dispatch({type: 'AUTH_LOGIN_INIT'});
     try {
-        await api.login(formData);
-        dispatch({ type: 'AUTH_LOGIN_SUCCESS', user: {} });
+        const user = await api.login(formData);
+        dispatch({ type: 'AUTH_LOGIN_SUCCESS', user })
     } catch(err) {
         dispatch({ type: 'AUTH_LOGIN_ERROR', error: err });
     }
