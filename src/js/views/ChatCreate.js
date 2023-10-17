@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { withBaseLayout } from '../layouts/Base';
 import { createChat } from '../actions/chats';
 
 function ChatCreate() {
@@ -62,4 +63,4 @@ function ChatCreate() {
   )
 }
 
-export default ChatCreate;
+export default withBaseLayout(ChatCreate, { canGoBack: true });

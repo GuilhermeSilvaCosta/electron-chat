@@ -7,6 +7,7 @@ import AvailableChats from '../components/AvailableChats';
 import Title from '../components/shared/Title';
 import { fetchChats } from '../actions/chats';
 import { withBaseLayout } from '../layouts/Base';
+import Notification from '../utils/notifications';
 
 function Home() {
 

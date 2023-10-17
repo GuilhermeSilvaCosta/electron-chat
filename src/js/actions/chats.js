@@ -11,11 +11,13 @@ export const fetchChats = () => async dispatch => {
 
 export const createChat = (formData, userId) => async dispatch => {
     const newChat = {...formData};
-    const useRef = db.doc(`profiles/${userId}`);
-    newChat.admin = useRef;
-    newChat.joinedUsers = [useRef];
+    newChat.admin = db.doc(`profiles/${userId}`);
   
-    const _ = await api
-        .createChat(newChat);
-    return dispatch({ type: 'CHATS_CREATE_SUCCESS' });
+    const chatId = await api.createChat(newChat);
+    dispatch({ type: 'CHATS_CREATE_SUCCESS' });
+
+    await api.joinChat(userId, chatId);
+    dispatch({type: 'CHATS_JOIN_SUCCESS'});
+    
+    return chatId;
 }
