@@ -6,7 +6,7 @@ import JoinedChats from '../components/JoinedChats';
 import AvailableChats from '../components/AvailableChats';
 import Title from '../components/shared/Title';
 import { fetchChats } from '../actions/chats';
-import Notification from '../utils/notifications';
+import { withBaseLayout } from '../layouts/Base';
 
 function Home() {
 
@@ -38,4 +38,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default withBaseLayout(Home, );

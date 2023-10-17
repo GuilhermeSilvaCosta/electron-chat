@@ -2,16 +2,13 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../actions/auth';
+import BackButton from './shared/BackButton';
 
-function Navbar() {
+function Navbar({ canGoBack, view }) {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(({auth}) => auth.user)
-
-  function handleBack() {
-    navigate(-1);
-  }
 
   function handleLogin() {
     navigate('/')
@@ -25,8 +22,12 @@ function Navbar() {
     <div className="chat-navbar">
       <nav className="chat-navbar-inner">
         <div className="chat-navbar-inner-left">
-          <button onClick={handleBack} className="btn btn-outline-primary">Back</button>
-          <Link to="/settings" className="btn btn-outline-success ml-2">Settings</Link>
+          {canGoBack && 
+            <BackButton />
+          }
+          { view !== 'Settings' &&
+            <Link to="/settings" className="btn btn-outline-success ml-2">Settings</Link>
+          }
         </div>
         <div className="chat-navbar-inner-right">
           { !user && 

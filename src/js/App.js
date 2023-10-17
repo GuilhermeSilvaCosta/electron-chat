@@ -9,12 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import StoreProvider from './store/StoreProvider';
 import Home from './views/Home';
-import Navbar from './components/Navbar';
 import Settings from './views/Settings';
 import ChatCreate from './views/ChatCreate';
 import Welcome from './views/Welcome';
 import Chat from './views/Chat';
 import LoadingView from './components/shared/LoadingView';
+import BaseLayout from './layouts/Base';
 
 import { listenToAuthChanges } from './actions/auth';
 import { listenToConnectionChanges } from './actions/app';
@@ -54,7 +54,6 @@ function ChatApp() {
 
   return (
     <Router>
-      <Navbar />
       <ContentWrapper>
         <Routes>
           <Route path="/" element={<Welcome />} />
