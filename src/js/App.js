@@ -14,10 +14,10 @@ import ChatCreate from './views/ChatCreate';
 import Welcome from './views/Welcome';
 import Chat from './views/Chat';
 import LoadingView from './components/shared/LoadingView';
-import BaseLayout from './layouts/Base';
 
 import { listenToAuthChanges } from './actions/auth';
 import { listenToConnectionChanges } from './actions/app';
+//import { checkUserConnection } from './actions/connection';
 
 
 function AuthRoute({children}) {
@@ -37,10 +37,12 @@ function ChatApp() {
   useEffect(() => {
     const unsubFromAuth = dispatch(listenToAuthChanges());
     const unsubFromConnection = dispatch(listenToConnectionChanges());
+    //const unsubFromUserConnection = dispatch(checkUserConnection());
 
     return () => {
       unsubFromAuth();
       unsubFromConnection();
+      //unsubFromUserConnection();
     }
   }, [dispatch]);
 

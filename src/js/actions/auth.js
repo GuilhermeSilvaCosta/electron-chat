@@ -23,6 +23,7 @@ export const loginUser = formData => async dispatch => {
 export const logout = () => async dispatch => {
     await api.logout();
     dispatch({ type: 'AUTH_LOGOUT_SUCCESS' });
+    dispatch({type: 'CHATS_FETCH_RESTART'});
 }
 
 export const listenToAuthChanges = () => dispatch => {
