@@ -7,8 +7,14 @@ import ChatUserList from '../components/ChatUserList';
 import ChatMessagesList from '../components/ChatMessagesList';
 import { withBaseLayout } from '../layouts/Base';
 import LoadingView from '../components/shared/LoadingView';
+import Messenger from '../components/Messenger';
 
-import { subscribeToChat, subscribeToProfile } from '../actions/chats';
+import { 
+  subscribeToChat, 
+  subscribeToProfile, 
+  sendChatMessage,
+  subscribeToMessages
+} from '../actions/chats';
 
 function Chat() {
   const { id } = useParams();
@@ -19,6 +25,7 @@ function Chat() {
 
   useEffect(() => {
     const unsubFromChat = dispatch(subscribeToChat(id));
+    dispatch(subscribeToMessages(id));
     return () => {
       unsubFromChat();
       unsubFromJoinedUsers();
@@ -37,6 +44,10 @@ function Chat() {
     })
   }, [dispatch, id]);
 
+  const sendMessage = useCallback(message => {
+    dispatch(sendChatMessage(message, id))
+  }, [id])
+
   const unsubFromJoinedUsers = useCallback(() => {
     Object.keys(peopleWatchers.current)
       .forEach(id => peopleWatchers.current[id]())
@@ -54,6 +65,7 @@ function Chat() {
       <div className="col-9 fh">
         <ViewTitle text={`Channel ${activeChat?.name}`} />
         <ChatMessagesList />
+        <Messenger onSubmit={sendMessage} />
       </div>
     </div>
   );

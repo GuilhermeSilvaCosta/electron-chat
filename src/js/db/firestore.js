@@ -11,4 +11,6 @@ const firebaseConfig = {
   databaseURL: 'electron-chat-ffd20-default-rtdb.firebaseio.com'
 };
 
+export const { Timestamp } = firebase.firestore;
+
 export default firebase.initializeApp(firebaseConfig).firestore();
