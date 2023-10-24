@@ -7,7 +7,8 @@ const firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID
+  appId: process.env.FIREBASE_APP_ID,
+  databaseURL: 'electron-chat-ffd20-default-rtdb.firebaseio.com'
 };
 
 export default firebase.initializeApp(firebaseConfig).firestore();
