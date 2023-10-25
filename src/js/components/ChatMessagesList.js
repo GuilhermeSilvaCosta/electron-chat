@@ -1,67 +1,35 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
-// import { Container } from './styles';
+import { formatTimeAgo } from '../utils/time';
 
-function ChatMessageList() {
+function ChatMessageList({messages = [], innerRef}) {
+  const user = useSelector(({auth}) => auth.user);
+
+  const isAuthorOf = useCallback(message => {
+    return message?.author.uid === user.uid ? 'chat-right' : 'chat-left';
+  })
+  
   return (
     <div className="chat-container">
-      <ul className="chat-box chatContainerScroll">
-        <li
-          className="chat-left">
-          <div className="chat-avatar">
-            <img
-              src="https://www.pinclipart.com/picdir/middle/133-1331433_free-user-avatar-icons-happy-flat-design-png.png"
-              alt="Retail Admin" />
-            <div className="chat-name">Test User 1</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 1</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
-        <li
-          className="chat-right">
-          <div className="chat-avatar">
-            <img
-              src="https://www.pinclipart.com/picdir/middle/192-1924992_hay-clipart.png"
-              alt="Retail Admin" />
-            <div className="chat-name">Test User 2</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 2</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
-        <li
-          className="chat-left">
-          <div className="chat-avatar">
-            <img
-              src="https://www.pinclipart.com/picdir/middle/74-742702_joker-clip-art.png"
-              alt="Retail Admin" />
-            <div className="chat-name">Test User 3</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 3</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
-        <li
-          className="chat-right">
-          <div className="chat-avatar">
-            <img
-              src="https://www.pinclipart.com/picdir/middle/527-5272849_pokemon-clipart.png"
-              alt="Retail Admin" />
-            <div className="chat-name">Test User 4</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 4</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
+      <ul ref={innerRef} className="chat-box chatContainerScroll">
+        {messages.map(message =>
+          <li
+            key={message.id}
+            className={isAuthorOf(message)}>
+            <div className="chat-avatar">
+              <img
+                src={message?.author.avatar}
+                alt="Retail Admin" />
+              <div className="chat-name">{message?.author.username}</div>
+            </div>
+            <div className="chat-text-wrapper">
+              <span className="chat-text">{message.content}</span>
+              <span className="chat-spacer"></span>
+              <div className="chat-hour">{formatTimeAgo(message.timestamp)}</div>
+            </div>
+          </li>
+        )}
       </ul>
     </div>
   );
